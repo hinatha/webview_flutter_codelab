@@ -170,4 +170,9 @@ req.send();''');
       ),
     );
   }
+
+  Future<void> _onLoadFlutterAssetExample(
+      WebViewController controller, BuildContext context) async {
+    await controller.loadFlutterAsset('assets/www/index.html');
+  }
 }
