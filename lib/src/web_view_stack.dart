@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewStack extends StatefulWidget {
-  const WebViewStack({super.key});
+  const WebViewStack({required this.controller, super.key}); // MODIFY
+
+  final WebViewController controller; // ADD
 
   @override
   State<WebViewStack> createState() => _WebViewStackState();
@@ -10,13 +12,14 @@ class WebViewStack extends StatefulWidget {
 
 class _WebViewStackState extends State<WebViewStack> {
   var loadingPercentage = 0;
-  late final WebViewController controller;
+  // REMOVE the controller that was here
 
   @override
   void initState() {
     super.initState();
-    controller = WebViewController()
-      ..setNavigationDelegate(NavigationDelegate(
+    // Modify from here...
+    widget.controller.setNavigationDelegate(
+      NavigationDelegate(
         onPageStarted: (url) {
           setState(() {
             loadingPercentage = 0;
@@ -32,10 +35,9 @@ class _WebViewStackState extends State<WebViewStack> {
             loadingPercentage = 100;
           });
         },
-      ))
-      ..loadRequest(
-        Uri.parse('https://flutter.dev'),
-      );
+      ),
+    );
+    // ...to here.
   }
 
   @override
@@ -43,7 +45,7 @@ class _WebViewStackState extends State<WebViewStack> {
     return Stack(
       children: [
         WebViewWidget(
-          controller: controller,
+          controller: widget.controller, // MODIFY
         ),
         if (loadingPercentage < 100)
           LinearProgressIndicator(
