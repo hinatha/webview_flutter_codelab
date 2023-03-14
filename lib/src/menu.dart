@@ -98,6 +98,15 @@ req.send();''');
           case _MenuOptions.removeCookie:
             await _onRemoveCookie(widget.controller);
             break;
+          case _MenuOptions.loadFlutterAsset:
+            await _onLoadFlutterAssetExample(widget.controller, context);
+            break;
+          case _MenuOptions.loadLocalFile:
+            await _onLoadLocalFileExample(widget.controller, context);
+            break;
+          case _MenuOptions.loadHtmlString:
+            await _onLoadHtmlStringExample(widget.controller, context);
+            break;
         }
       },
       itemBuilder: (context) => [
@@ -132,6 +141,18 @@ req.send();''');
         const PopupMenuItem<_MenuOptions>(
           value: _MenuOptions.removeCookie,
           child: Text('Remove cookie'),
+        ),
+        const PopupMenuItem<_MenuOptions>(
+          value: _MenuOptions.loadFlutterAsset,
+          child: Text('Load Flutter Asset'),
+        ),
+        const PopupMenuItem<_MenuOptions>(
+          value: _MenuOptions.loadHtmlString,
+          child: Text('Load HTML string'),
+        ),
+        const PopupMenuItem<_MenuOptions>(
+          value: _MenuOptions.loadLocalFile,
+          child: Text('Load local file'),
         ),
       ],
     );
