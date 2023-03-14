@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewStack extends StatefulWidget {
-  const WebViewStack({required this.controller, super.key}); // MODIFY
+  const WebViewStack({required this.controller, super.key});
 
-  final WebViewController controller; // ADD
+  final WebViewController controller;
 
   @override
   State<WebViewStack> createState() => _WebViewStackState();
@@ -12,12 +12,10 @@ class WebViewStack extends StatefulWidget {
 
 class _WebViewStackState extends State<WebViewStack> {
   var loadingPercentage = 0;
-  // REMOVE the controller that was here
 
   @override
   void initState() {
     super.initState();
-    // Modify from here...
     widget.controller.setNavigationDelegate(
       NavigationDelegate(
         onPageStarted: (url) {
@@ -35,9 +33,24 @@ class _WebViewStackState extends State<WebViewStack> {
             loadingPercentage = 100;
           });
         },
+        // Add from here...
+        onNavigationRequest: (navigation) {
+          final host = Uri.parse(navigation.url).host;
+          if (host.contains('youtube.com')) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  'Blocking navigation to $host',
+                ),
+              ),
+            );
+            return NavigationDecision.prevent;
+          }
+          return NavigationDecision.navigate;
+        },
+        // ...to here.
       ),
     );
-    // ...to here.
   }
 
   @override
@@ -45,7 +58,7 @@ class _WebViewStackState extends State<WebViewStack> {
     return Stack(
       children: [
         WebViewWidget(
-          controller: widget.controller, // MODIFY
+          controller: widget.controller,
         ),
         if (loadingPercentage < 100)
           LinearProgressIndicator(
