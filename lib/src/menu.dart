@@ -28,12 +28,15 @@ enum _MenuOptions {
   navigationDelegate,
   userAgent,
   javascriptChannel,
-  // Add from here ...
   listCookies,
   clearCookies,
   addCookie,
   setCookie,
   removeCookie,
+  // Add from here ...
+  loadFlutterAsset,
+  loadLocalFile,
+  loadHtmlString,
   // ... to here.
 }
 
