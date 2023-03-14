@@ -50,7 +50,16 @@ class _WebViewStackState extends State<WebViewStack> {
           },
         ),
       )
-      ..setJavaScriptMode(JavaScriptMode.unrestricted); // ADD
+      // Modify from here...
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..addJavaScriptChannel(
+        'SnackBar',
+        onMessageReceived: (message) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(message.message)));
+        },
+      );
+    // ...to here.
   }
 
   @override
