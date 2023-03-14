@@ -1,5 +1,28 @@
+import 'dart:io'; // Add this line,
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart'; // And this one.
 import 'package:webview_flutter/webview_flutter.dart';
+
+// Add from here ...
+const String kExamplePage = '''
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Load file or HTML string example</title>
+</head>
+<body>
+
+<h1>Local demo page</h1>
+<p>
+  This is an example page used to demonstrate how to load a local file or HTML
+  string using the <a href="https://pub.dev/packages/webview_flutter">Flutter
+  webview</a> plugin.
+</p>
+
+</body>
+</html>
+''';
+// ... to here.
 
 enum _MenuOptions {
   navigationDelegate,
@@ -174,5 +197,22 @@ req.send();''');
   Future<void> _onLoadFlutterAssetExample(
       WebViewController controller, BuildContext context) async {
     await controller.loadFlutterAsset('assets/www/index.html');
+  }
+
+  Future<void> _onLoadLocalFileExample(
+      WebViewController controller, BuildContext context) async {
+    final String pathToIndex = await _prepareLocalFile();
+
+    await controller.loadFile(pathToIndex);
+  }
+
+  static Future<String> _prepareLocalFile() async {
+    final String tmpDir = (await getTemporaryDirectory()).path;
+    final File indexFile = File('$tmpDir/www/index.html');
+
+    await Directory('$tmpDir/www').create(recursive: true);
+    await indexFile.writeAsString(kExamplePage);
+
+    return indexFile.path;
   }
 }
