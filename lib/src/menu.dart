@@ -215,4 +215,10 @@ req.send();''');
 
     return indexFile.path;
   }
+
+  // Add here ...
+  Future<void> _onLoadHtmlStringExample(
+      WebViewController controller, BuildContext context) async {
+    await controller.loadHtmlString(kExamplePage);
+  }
 }
