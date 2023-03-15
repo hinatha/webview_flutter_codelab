@@ -1,9 +1,9 @@
-import 'dart:io'; // Add this line,
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart'; // And this one.
+import 'package:path_provider/path_provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-// Add from here ...
+// Set HTML as String type
 const String kExamplePage = '''
 <!DOCTYPE html>
 <html lang="en">
@@ -22,8 +22,8 @@ const String kExamplePage = '''
 </body>
 </html>
 ''';
-// ... to here.
 
+// Set MenuOption as enum
 enum _MenuOptions {
   navigationDelegate,
   userAgent,
@@ -33,31 +33,44 @@ enum _MenuOptions {
   addCookie,
   setCookie,
   removeCookie,
-  // Add from here ...
   loadFlutterAsset,
   loadLocalFile,
   loadHtmlString,
-  // ... to here.
 }
 
+// Just define Menu class.
 class Menu extends StatefulWidget {
+  // create a new instance of the Menu widget.
+  // this.controller is WebViewController.
+  // super.key is calling the constructor's key of StatefulWidget.
+  // assign super.key to Menu widget.
   const Menu({required this.controller, super.key});
 
+  // Define controller
   final WebViewController controller;
 
+  // Override createState method in StatefulWidget
   @override
+  // create and return a new instance of _MenuState
+  // as the state object for the WebViewApp widget.
   State<Menu> createState() => _MenuState();
 }
 
+// Just define _MenuState class
 class _MenuState extends State<Menu> {
+  // New cookie manager.
   final cookieManager = WebViewCookieManager();
 
+  // Create the page of menu button part.
   @override
   Widget build(BuildContext context) {
+    // About menu button
     return PopupMenuButton<_MenuOptions>(
+      // value is the defined enum
       onSelected: (value) async {
         switch (value) {
           case _MenuOptions.navigationDelegate:
+            // Request moving to youtube.com
             await widget.controller
                 .loadRequest(Uri.parse('https://youtube.com'));
             break;
@@ -65,11 +78,13 @@ class _MenuState extends State<Menu> {
             final userAgent = await widget.controller
                 .runJavaScriptReturningResult('navigator.userAgent');
             if (!mounted) return;
+            // Show userAgent as SnackBar
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text('$userAgent'),
             ));
             break;
           case _MenuOptions.javascriptChannel:
+            // Run JavaScript to get IP Address
             await widget.controller.runJavaScript('''
 var req = new XMLHttpRequest();
 req.open('GET', "https://api.ipify.org/?format=json");
@@ -109,6 +124,7 @@ req.send();''');
             break;
         }
       },
+      // Set the each menu title
       itemBuilder: (context) => [
         const PopupMenuItem<_MenuOptions>(
           value: _MenuOptions.navigationDelegate,
@@ -218,11 +234,13 @@ req.send();''');
     );
   }
 
+  // Show HTML included css.
   Future<void> _onLoadFlutterAssetExample(
       WebViewController controller, BuildContext context) async {
     await controller.loadFlutterAsset('assets/www/index.html');
   }
 
+  // Show HTML defined in assets/www/index.html as String
   Future<void> _onLoadLocalFileExample(
       WebViewController controller, BuildContext context) async {
     final String pathToIndex = await _prepareLocalFile();
@@ -230,6 +248,7 @@ req.send();''');
     await controller.loadFile(pathToIndex);
   }
 
+  // Load local HTML file as String
   static Future<String> _prepareLocalFile() async {
     final String tmpDir = (await getTemporaryDirectory()).path;
     final File indexFile = File('$tmpDir/www/index.html');
@@ -240,7 +259,7 @@ req.send();''');
     return indexFile.path;
   }
 
-  // Add here ...
+  // Show HTML defined in this file.
   Future<void> _onLoadHtmlStringExample(
       WebViewController controller, BuildContext context) async {
     await controller.loadHtmlString(kExamplePage);
