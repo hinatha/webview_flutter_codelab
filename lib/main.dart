@@ -6,6 +6,7 @@ import 'src/navigation_controls.dart';
 import 'src/web_view_stack.dart';
 
 // This is entry point of this app.
+// Execute main method.
 void main() {
   runApp(
     MaterialApp(
@@ -15,6 +16,7 @@ void main() {
   );
 }
 
+// Just define WebViewApp class
 class WebViewApp extends StatefulWidget {
   // create a new instance of the WebViewApp widget.
   // super.key is calling the constructor's key of StatefulWidget.
@@ -28,6 +30,7 @@ class WebViewApp extends StatefulWidget {
   State<WebViewApp> createState() => _WebViewAppState();
 }
 
+// Just define _WebViewAppState class
 class _WebViewAppState extends State<WebViewApp> {
   // late denotes that a non-nullable variable will be initialized later in the code.
   // WebViewController is responsible for controlling and managing the web view.
